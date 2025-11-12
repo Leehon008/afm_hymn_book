@@ -12,9 +12,6 @@ class HymnDetailPage extends StatefulWidget {
 
 class _HymnDetailPageState extends State<HymnDetailPage> {
   final FirebaseBackend _firebaseBackend = FirebaseBackend();
-  void hymn() async {
-    final hymn = await _firebaseBackend.getHymnById(widget.hymnId);
-  }
 
   @override
   Widget build(BuildContext context) {

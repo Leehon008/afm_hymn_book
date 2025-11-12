@@ -1,5 +1,5 @@
 import 'package:afmnziyo/firebase_options.dart';
-import 'package:afmnziyo/pages/home..dart';
+import 'package:afmnziyo/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
