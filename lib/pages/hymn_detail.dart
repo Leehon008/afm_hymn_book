@@ -36,8 +36,8 @@ class _HymnDetailPageState extends State<HymnDetailPage> {
                     final hymnData = snapshot.data!;
                     final data = hymnData.data() as Map<String, dynamic>;
                     final hymnTitle = data['title'] ?? 'Hymn';
-                    if (hymnTitle.length > 30) {
-                      return Text(hymnTitle.substring(0, 25) + '...');
+                    if (hymnTitle.length > 20) {
+                      return Text(hymnTitle.substring(0, 20) + '...');
                     }
                     return Text(hymnTitle);
                   } else {
@@ -74,9 +74,15 @@ class _HymnDetailPageState extends State<HymnDetailPage> {
               final hymnText = data['hymn'] ?? 'No hymn data available';
 
               return Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(5.0),
                 child: SingleChildScrollView(
-                  child: Text(hymnText, style: TextStyle(fontSize: 16)),
+                  child: Card(
+                    elevation: 0.3,
+                    margin: EdgeInsets.all(5.0),
+                    child: ListTile(
+                      subtitle: Text(hymnText, style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
                 ),
               );
             } else {

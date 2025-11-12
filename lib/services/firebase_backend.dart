@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseBackend {
-  //Todo: Implement Firebase backend services
-
   //initialize Firebase
   final CollectionReference hymnsCollection = FirebaseFirestore.instance
       .collection('hymns');
