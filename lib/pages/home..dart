@@ -1,0 +1,114 @@
+import 'package:afmnziyo/pages/hymn_detail.dart';
+import 'package:afmnziyo/services/firebase_backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+class AfmHomePage extends StatefulWidget {
+  const AfmHomePage({super.key});
+
+  @override
+  State<AfmHomePage> createState() => _AfmHomePageState();
+}
+
+class _AfmHomePageState extends State<AfmHomePage> {
+  final TextEditingController _hymnTextController = TextEditingController();
+  final FirebaseBackend _firebaseBackend = FirebaseBackend();
+
+  void openDialogBox() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: TextField(controller: _hymnTextController),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              _firebaseBackend.addHymn(_hymnTextController.text);
+              _hymnTextController.clear();
+              Navigator.of(context).pop();
+            },
+            child: Text('Add Hymn'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white, size: 24),
+        title: Text('AFM Hymns'),
+        backgroundColor: const Color.fromARGB(255, 107, 149, 220),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firebaseBackend.getHymns(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final hymns = snapshot.data!.docs;
+            // Display hymns in a ListView
+            return ListView.builder(
+              itemCount: hymns.length,
+              itemBuilder: (context, index) {
+                final hymn = hymns[index];
+                String docID = hymn.id;
+                Map<String, dynamic> data =
+                    hymn.data()! as Map<String, dynamic>;
+                String hymnText = data['hymn'] ?? '';
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    leading: const Icon(
+                      Icons.bookmark_outline_outlined,
+                      size: 20,
+                    ),
+                    title: Text(
+                      hymnText,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    trailing: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(docID, style: TextStyle(fontSize: 16)),
+                        const Icon(Icons.chevron_right, color: Colors.grey),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HymnDetailPage(hymnId: docID),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: openDialogBox,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
