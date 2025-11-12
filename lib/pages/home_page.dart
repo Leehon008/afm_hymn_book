@@ -59,7 +59,7 @@ class _AfmHomePageState extends State<AfmHomePage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white, size: 24),
-        title: Text('AFM Hymns'),
+        title: Text('AFM Nziyo', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 107, 149, 220),
       ),
       body: StreamBuilder<QuerySnapshot>(
