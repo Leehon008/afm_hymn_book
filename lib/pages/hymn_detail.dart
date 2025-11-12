@@ -21,7 +21,7 @@ class _HymnDetailPageState extends State<HymnDetailPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(widget.hymnId),
+              // Text(widget.hymnId),
               FutureBuilder(
                 future: _firebaseBackend.getHymnById(widget.hymnId),
                 builder: (context, snapshot) {
@@ -33,8 +33,8 @@ class _HymnDetailPageState extends State<HymnDetailPage> {
                     final hymnData = snapshot.data!;
                     final data = hymnData.data() as Map<String, dynamic>;
                     final hymnTitle = data['title'] ?? 'Hymn';
-                    if (hymnTitle.length > 20) {
-                      return Text(hymnTitle.substring(0, 20) + '...');
+                    if (hymnTitle.length > 25) {
+                      return Text(hymnTitle.substring(0, 25) + '...');
                     }
                     return Text(hymnTitle);
                   } else {
