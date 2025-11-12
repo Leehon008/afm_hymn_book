@@ -11,19 +11,40 @@ class AfmHomePage extends StatefulWidget {
 }
 
 class _AfmHomePageState extends State<AfmHomePage> {
-  final TextEditingController _hymnTextController = TextEditingController();
+  final TextEditingController _hymnTitleTextController =
+      TextEditingController();
+  final TextEditingController _hymnBodyTextController = TextEditingController();
   final FirebaseBackend _firebaseBackend = FirebaseBackend();
 
   void openDialogBox() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: TextField(controller: _hymnTextController),
+        title: Text('Add Hymn'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _hymnTitleTextController,
+              decoration: InputDecoration(labelText: 'Hymn Title'),
+            ),
+            SizedBox(height: 12),
+            TextField(
+              controller: _hymnBodyTextController,
+              decoration: InputDecoration(labelText: 'Hymn Body'),
+              maxLines: 4,
+            ),
+          ],
+        ),
         actions: [
           ElevatedButton(
             onPressed: () {
-              _firebaseBackend.addHymn(_hymnTextController.text);
-              _hymnTextController.clear();
+              _firebaseBackend.addHymn(
+                _hymnTitleTextController.text,
+                _hymnBodyTextController.text,
+              );
+              _hymnTitleTextController.clear();
+              _hymnBodyTextController.clear();
               Navigator.of(context).pop();
             },
             child: Text('Add Hymn'),
@@ -54,7 +75,7 @@ class _AfmHomePageState extends State<AfmHomePage> {
                 String docID = hymn.id;
                 Map<String, dynamic> data =
                     hymn.data()! as Map<String, dynamic>;
-                String hymnText = data['hymn'] ?? '';
+                String hymnText = data['title'] ?? '';
                 return Card(
                   margin: const EdgeInsets.symmetric(
                     horizontal: 12,

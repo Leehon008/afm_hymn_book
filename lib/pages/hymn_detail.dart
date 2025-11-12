@@ -35,23 +35,28 @@ class _HymnDetailPageState extends State<HymnDetailPage> {
                   } else if (snapshot.hasData) {
                     final hymnData = snapshot.data!;
                     final data = hymnData.data() as Map<String, dynamic>;
-                    final hymnTitle = data['hymn'] ?? 'Hymn';
+                    final hymnTitle = data['title'] ?? 'Hymn';
+                    if (hymnTitle.length > 30) {
+                      return Text(hymnTitle.substring(0, 25) + '...');
+                    }
                     return Text(hymnTitle);
                   } else {
                     return const Text('Hymn not found');
                   }
                 },
               ),
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Icon(Icons.music_note),
-                      Icon(Icons.bookmark_outline_outlined),
-                    ],
-                  ),
-                ],
-              ),
+              // Column(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Icon(Icons.preview_outlined),
+              //         Icon(Icons.bookmark_outline_outlined),
+              //       ],
+              //     ),
+              //   ],
+              // ),
             ],
           ),
           backgroundColor: const Color.fromARGB(255, 107, 149, 220),

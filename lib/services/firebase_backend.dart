@@ -8,7 +8,7 @@ class FirebaseBackend {
       .collection('hymns');
 
   // add data to Firestore
-  Future<void> addHymn(String hymnData) async {
+  Future<void> addHymn(String hymTitle, String hymnData) async {
     final counterRef = FirebaseFirestore.instance
         .collection('metadata')
         .doc('hymnCounter');
@@ -32,6 +32,7 @@ class FirebaseBackend {
     final docRef = hymnsCollection.doc(newId.toString());
     await docRef.set({
       'id': newId,
+      'title': hymTitle,
       'hymn': hymnData,
       'timestamp': Timestamp.now(),
     });
