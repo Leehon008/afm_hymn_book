@@ -1,10 +1,13 @@
 import 'package:afmnziyo/pages/hymn_detail.dart';
 import 'package:afmnziyo/services/firebase_backend.dart';
+import 'package:afmnziyo/services/theme_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class AfmHomePage extends StatefulWidget {
-  const AfmHomePage({super.key});
+  final ThemeService themeService;
+
+  const AfmHomePage({super.key, required this.themeService});
 
   @override
   State<AfmHomePage> createState() => _AfmHomePageState();
@@ -58,9 +61,29 @@ class _AfmHomePageState extends State<AfmHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white, size: 24),
-        title: Text('AFM Nziyo', style: TextStyle(color: Colors.white)),
+        iconTheme: const IconThemeData(color: Colors.white, size: 24),
+        title: const Text('AFM Nziyo', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color.fromARGB(255, 107, 149, 220),
+        actions: [
+          ListenableBuilder(
+            listenable: widget.themeService,
+            builder: (context, _) {
+              return IconButton(
+                icon: Icon(
+                  widget.themeService.isDarkMode
+                      ? Icons.light_mode
+                      : Icons.dark_mode,
+                ),
+                onPressed: () {
+                  widget.themeService.toggleTheme();
+                },
+                tooltip: widget.themeService.isDarkMode
+                    ? 'Light Mode'
+                    : 'Dark Mode',
+              );
+            },
+          ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firebaseBackend.getHymns(),
