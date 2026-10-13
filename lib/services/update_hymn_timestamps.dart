@@ -32,6 +32,4 @@ Future<void> main() async {
   if (batchCount > 0) {
     await batch.commit();
   }
-
-  print('Updated $updated hymn documents.');
 }
